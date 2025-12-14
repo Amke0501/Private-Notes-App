@@ -83,7 +83,8 @@ router.post('/login', async (req, res) => {
       user: {
         id: data.user.id,
         email: data.user.email
-      }
+      },
+      token: data.session.access_token // Send token in response for localStorage
     });
   } catch (error) {
     console.error('Login error:', error);

@@ -1,5 +1,22 @@
 const API_URL = 'https://private-notes-app.onrender.com/api';
 
+// Helper to get auth token
+const getAuthToken = () => {
+  return localStorage.getItem('access_token');
+};
+
+// Helper to get headers with auth
+const getAuthHeaders = () => {
+  const token = getAuthToken();
+  const headers = {
+    'Content-Type': 'application/json',
+  };
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  return headers;
+};
+
 /**
  * Authentication API calls
  */
@@ -29,7 +46,7 @@ export const authAPI = {
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: 'include', // Important: include cookies
+      credentials: 'include',
       body: JSON.stringify({ email, password }),
     });
     
@@ -39,12 +56,18 @@ export const authAPI = {
       throw new Error(data.error || 'Login failed');
     }
     
+    // Store token in localStorage
+    if (data.token) {
+      localStorage.setItem('access_token', data.token);
+    }
+    
     return data;
   },
 
   logout: async () => {
     const response = await fetch(`${API_URL}/auth/logout`, {
       method: 'POST',
+      headers: getAuthHeaders(),
       credentials: 'include',
     });
     
@@ -54,11 +77,15 @@ export const authAPI = {
       throw new Error(data.error || 'Logout failed');
     }
     
+    // Remove token from localStorage
+    localStorage.removeItem('access_token');
+    
     return data;
   },
 
   getCurrentUser: async () => {
     const response = await fetch(`${API_URL}/auth/me`, {
+      headers: getAuthHeaders(),
       credentials: 'include',
     });
     
@@ -78,6 +105,7 @@ export const authAPI = {
 export const notesAPI = {
   getNotes: async () => {
     const response = await fetch(`${API_URL}/notes`, {
+      headers: getAuthHeaders(),
       credentials: 'include',
     });
     
@@ -93,9 +121,7 @@ export const notesAPI = {
   createNote: async (title, content) => {
     const response = await fetch(`${API_URL}/notes`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: getAuthHeaders(),
       credentials: 'include',
       body: JSON.stringify({ title, content }),
     });
@@ -112,9 +138,7 @@ export const notesAPI = {
   updateNote: async (id, title, content) => {
     const response = await fetch(`${API_URL}/notes/${id}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: getAuthHeaders(),
       credentials: 'include',
       body: JSON.stringify({ title, content }),
     });
@@ -131,6 +155,7 @@ export const notesAPI = {
   deleteNote: async (id) => {
     const response = await fetch(`${API_URL}/notes/${id}`, {
       method: 'DELETE',
+      headers: getAuthHeaders(),
       credentials: 'include',
     });
     

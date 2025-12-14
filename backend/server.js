@@ -14,6 +14,7 @@ const PORT = process.env.PORT || 5000;
 const allowedOrigins = [
   'http://localhost:5173',
   'https://private-notes-app-theta.vercel.app',
+  'https://private-notes-app-iyxo.vercel.app',
   process.env.FRONTEND_URL
 ].filter(Boolean);
 

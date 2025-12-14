@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://private-notes-app.onrender.com/api';
 
 /**
  * Authentication API calls

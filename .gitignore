@@ -1,0 +1,27 @@
+# Deployment guides (internal use only)
+RENDER_DEPLOYMENT.md
+
+# Environment files
+backend/.env
+frontend/.env
+.env
+.env.local
+
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
